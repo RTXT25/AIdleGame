@@ -1,0 +1,97 @@
+<html>
+  <head>
+    <title>Idle Game</title>
+    <style>
+      #gameContainer {
+        width: 600px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      
+      #earningsContainer {
+        margin-bottom: 20px;
+      }
+      
+      #clickButton {
+        padding: 10px 20px;
+        background-color: lightblue;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      
+      #upgradesContainer {
+        margin-top: 20px;
+      }
+      
+      .upgrade {
+        margin-bottom: 20px;
+      }
+      
+      .upgradeButton {
+        padding: 10px 20px;
+        background-color: green;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="gameContainer">
+      <h1>Idle Game</h1>
+      <div id="earningsContainer">
+        <p>Earnings: <span id="earnings">0</span></p>
+      </div>
+      <button id="clickButton">Click</button>
+      <div id="upgradesContainer">
+        <h2>Upgrades</h2>
+        <div class="upgrade">
+          <p>Automatic Clicker: <span id="automaticClickerLevel">0</span></p>
+          <button class="upgradeButton">Upgrade (Cost: 10)</button>
+        </div>
+        
+        <!-- Add more upgrades here -->
+      </div>
+    </div>
+    <script>
+      const earnings = document.querySelector("#earnings");
+      const clickButton = document.querySelector("#clickButton");
+      const upgradeButtons = document.querySelectorAll(".upgradeButton");
+      const automaticClickerLevelSpan = document.querySelector("#automaticClickerLevel");
+
+      let totalEarnings = 0;
+      let automaticEarningsInterval;
+
+      // Event listener for the click button
+      clickButton.addEventListener("click", function() {
+        totalEarnings += 1;
+        earnings.innerHTML = totalEarnings;
+      });
+
+      // Event listener for the upgrade buttons
+      upgradeButtons.forEach(function(button) {
+        button.addEventListener("click", function() {
+          const upgradeLevelSpan = this.previousElementSibling.querySelector("span");
+          const upgradeLevel = parseInt(upgradeLevelSpan.innerHTML);
+          const cost = upgradeLevel * 10 + 10;
+          if (totalEarnings >= cost) {
+            totalEarnings -= cost;
+            earnings.innerHTML = totalEarnings;
+            upgradeLevelSpan.innerHTML = upgradeLevel + 1;
+            this.innerHTML = `Upgrade (Cost: ${cost + 10})`;
+          
+
+            clearInterval(automaticEarningsInterval);
+            automaticEarningsInterval = setInterval(function() {
+              totalEarnings += upgradeLevel + 1;
+              earnings.innerHTML = totalEarnings;
+            }, 1000);
+          } else {
+            alert("Not enough earnings to upgrade");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
